@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>WebScoket-test</title>
+</head>
+<body>
+	<div id="box">
+		<a href="javascript:WebSocketTest()">测试WebScoket</a>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+	<script src="./md5.js"></script>
+	<script src="./aes.js"></script>
+	<script src="./aesutil.js"></script>
+	<script>
+		console.log(hexMD5(sha1('Hello World')))
+		console.log(encrypt('fdb3f2de19edf45943189a32afa02495', 'Hello World'))
+		function WebSocketTest() {
+			if ("WebSocket" in window) {
+				let ws = new WebSocket("ws://119.23.10.165:18089")
+				var text = document.createElement("div");
+				document.getElementById('box').appendChild(text)
+				ws.onopen = function () {
+					console.log('连接中...');
+					let data = {'token':'fdb3f2de19edf45943189a32afa02495'};
+					console.log(data)
+        			ws.send(JSON.stringify( data ));
+				}
+				ws.onmessage = function (evt) {
+					console.log('连接成功');
+					console.log(evt.data);
+					let data = JSON.parse(evt.data)
+					text.innerHTML = data
+					console.log(data.data);
+				}
+				ws.onerror = function (err) {
+					console.log(err);
+				}
+			} else {
+				alert("你的浏览器不支持WebSocket!!!!!")
+			}
+		}
+	</script>
+</body>
+</html>
